@@ -1,5 +1,22 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
+import Home from "./pages/Home.vue"
+import Item from "./pages/Item.vue"
+import { createRouter, createWebHistory } from "vue-router"
 
-createApp(App).mount('#app')
+const router = createRouter({
+  history:createWebHistory(),
+  routes:[{
+    path:"/",
+    component:Home
+  },
+  {
+    path:"/item/:id",
+    component:Item
+  }]
+});
+
+const app = createApp(App)
+app.use(router)
+app.mount('#app')
