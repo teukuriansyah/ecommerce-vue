@@ -3,6 +3,7 @@ import './style.css'
 import App from './App.vue'
 import Home from "./pages/Home.vue"
 import Item from "./pages/Item.vue"
+import Cart from "./pages/Cart.vue"
 import { createRouter, createWebHistory } from "vue-router"
 
 const router = createRouter({
@@ -14,6 +15,10 @@ const router = createRouter({
   {
     path:"/item/:id",
     component:Item
+  },
+  {
+    path:"/cart",
+    component:Cart
   }]
 });
 

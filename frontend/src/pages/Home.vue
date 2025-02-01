@@ -1,5 +1,5 @@
 <template>
-  <Navbar/>
+  <Navbar :cart="cart"/>
   <div v-if="allData == 'loading'" class="p-3">Loading ...</div>
   <div v-else class="grid grid-cols-2 gap-3 p-3">
     <a v-for="data in allData" :href="'/item/'+data.id"><List :title="data?.title" :img="data?.image" :price="data?.price"/></a>
@@ -13,10 +13,14 @@
   import List from "../components/List.vue"
   
   let allData = ref("loading");
+  let cart = ref(0);
   
   onMounted(() => {
     axios.get("https://fakestoreapi.com/products")
-    .then(res => allData.value = res.data)
+    .then(res => {
+      allData.value = res.data; 
+      cart.value = JSON.parse(localStorage.getItem("data")).data.length
+    })
     .catch(err => console.log(err)) 
   })
   

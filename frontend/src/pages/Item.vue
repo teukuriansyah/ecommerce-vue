@@ -1,5 +1,5 @@
 <template>
-  <Navbar />
+  <Navbar :cart="dataCarts.length"/>
   <div class="p-3">
     <img :src="data?.image" :alt="data?.title" class="object-contain aspect-square"/>
   </div>
@@ -14,6 +14,9 @@
     <p>{{ data?.description }}</p>
   </div>
   <div class="flex flex-col gap-3 p-3 shadow-lg shadow-black sticky bottom-0 bg-white w-full">
+    <div>
+      <h1 class="font-bold text-2xl">Rp {{ numberWithCommas(data?.price*16000*count) }}</h1>
+    </div>
     <div class="flex justify-between p-2">
       <button @click="decrementCount" class="border-2 border-black rounded font-bold px-2">-</button>
       <p>{{ count }}</p>
@@ -55,24 +58,20 @@
       }
       else {
         localStorage.setItem("data",JSON.stringify({data:[]}))
-        dataCarts.value = {
-          data:[]
-        }
+        dataCarts.value = []
+        count.value = 1
       }
     });
   });
   
-  setTimeout(() => {
-    console.log(dataCarts.value)
-    console.log(dataCarts.value.find(x => x.id == id))
-  },8000)
-  
   function addToCart() {
     let dataItem = {
       id: data.value.id,
-      count: count.value
+      title:data.value.title, 
+      price:data.value.price, 
+      count: count.value, 
+      img:data.value.image
     };
-  
     // Cek apakah item sudah ada di keranjang
     const existingItem = dataCarts.value.find(dataCart => dataCart.id === dataItem.id);
   
@@ -86,6 +85,8 @@
   
     // Simpan dataCarts ke localStorage
     localStorage.setItem("data", JSON.stringify({ data: dataCarts.value }));
+    
+    alert("Barang berhasil ditambahkan ke keranjang")
   }
   
   function incrementCount() {
@@ -104,7 +105,7 @@
   function payment() {
     axios.post("http://localhost:3000/payment",{
       id:Math.round(Math.random()*100000000),
-      amount:data.value.price*16000 
+      amount:data.value.price*16000*count.value 
     })
     .then(res => window.location.assign(res.data.data.redirect_url))
   }
